@@ -1,4 +1,14 @@
-from distutils.core import setup
+import sys
+import os
+
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
+
+if sys.argv[-1] == 'publish':
+    os.system('python3 setup.py sdist upload')  # bdist_wininst
+    sys.exit()
 
 with open('requirements.txt') as f:
     required = f.read().splitlines()
@@ -6,7 +16,7 @@ with open('requirements.txt') as f:
 setup(
     name='fakenews_detector',
     packages=['fakenews_detector'],
-    version='0.1.5',
+    version='0.1.6',
     description='Detect fake and get information about the source.',
     author='Mieszko Makuch',
     author_email='mmakuch@googlemail.com',
