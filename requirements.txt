@@ -1,1 +1,5 @@
+sklearn
+scipy
+numpy
+requests
 validators==0.11.3
