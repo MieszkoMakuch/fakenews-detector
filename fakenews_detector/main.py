@@ -4,6 +4,11 @@ from urllib.parse import urlparse
 
 import requests
 import validators
+import os
+
+_ROOT = os.path.abspath(os.path.dirname(__file__))
+def get_data(path):
+    return os.path.join(_ROOT, 'json_local', path)
 
 valid_urls = ['http://www.google.pl/',
               'google.pl/',
@@ -49,7 +54,7 @@ class OpenSourcesInfo:
 
     @staticmethod
     def init_tags_descriptions():
-        with open('json_local/opensources/tags.json') as data_file:
+        with open(get_data('opensources/tags.json')) as data_file:
             return json.load(data_file)
 
     tags_descriptions = init_tags_descriptions.__func__()
@@ -112,7 +117,7 @@ class FakeNewsDBInfo:
 
     @staticmethod
     def init_categories_descriptions():
-        with open('json_local/categories.json') as data_file:
+        with open(get_data('categories.json')) as data_file:
             return json.load(data_file)
 
     tags_descriptions = init_categories_descriptions.__func__()
@@ -186,7 +191,7 @@ def check_if_all_categories_are_described():
     json_data = requests.get(
         'https://raw.githubusercontent.com/aligajani/fake-news-detector/master/output/fake-news-source.json').json()
 
-    with open('json_local/categories.json') as data_file:
+    with open(get_data('categories.json')) as data_file:
         json_tags = json.load(data_file)
 
     not_listed = []

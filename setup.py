@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='fakenews_detector',
     packages=['fakenews_detector'],
-    version='0.1.3',
+    version='0.1.4',
     description='Detect fake and get information about the source.',
     author='Mieszko Makuch',
     author_email='mmakuch@googlemail.com',
