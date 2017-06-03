@@ -16,7 +16,7 @@ with open('requirements.txt') as f:
 setup(
     name='fakenews_detector',
     packages=['fakenews_detector'],
-    version='0.1.6',
+    version='0.1.7',
     description='Detect fake and get information about the source.',
     author='Mieszko Makuch',
     author_email='mmakuch@googlemail.com',
@@ -25,6 +25,7 @@ setup(
     keywords=['fakenews', 'fake', 'news', 'detector'],
     classifiers=[],
     package_data={'fakenews_detector': ['json_local/*', 'json_local/opensources/*']},
+    include_package_data=True,
     install_requires=required,
     zip_safe=False
 )
