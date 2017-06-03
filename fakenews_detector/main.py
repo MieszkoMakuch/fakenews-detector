@@ -1,11 +1,8 @@
-import json
-
-import requests
 from newspaper import Article
 
 from fakenews_detector.domain_checker import check_domain
 from fakenews_detector.fake_fact_ai.application import mod
-from fakenews_detector.url_utils import get_domain, get_data_path
+from fakenews_detector.url_utils import get_domain
 
 
 def ai_check(article):
@@ -48,21 +45,6 @@ def check_news(url):
     return result
 
 
-def check_if_all_categories_are_described():
-    json_data = requests.get(
-        'https://raw.githubusercontent.com/aligajani/fake-news-detector/master/output/fake-news-source.json').json()
-
-    with open(get_data_path('categories.json')) as data_file:
-        json_tags = json.load(data_file)
-
-    not_listed = []
-    for json_site in json_data:
-        if json_site['siteCategory'] not in json_tags:
-            not_listed.append(json_site)
-    for site in not_listed:
-        print(site['siteCategory'])
-
-
 url_ancientcode = 'http://www.ancient-code.com/does-this-top-secret-memo-finally-prove-ufo-crash-roswell/'
 print(check_news(url_ancientcode))
 
@@ -74,3 +56,6 @@ print(check_news(url_szdziennik))
 
 url_onet = 'http://muzyka.onet.pl/wywiady/margaret-dzis-popelniam-bledy-z-podniesiona-glowa-wywiad/s7c0bq'
 print(check_news(url_onet))
+
+url_test = 'http://www.chicagotribune.com/news/nationworld/ct-london-bridge-incident-20170603-story.html'
+print(check_news(url_test))
