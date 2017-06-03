@@ -7,10 +7,12 @@
 # sentence length(# of words)
 # # of punctuations
 # # of illegal punctuations
-import string
-import numpy as np
 import re
+import string
+
 import nltk
+import numpy as np
+
 
 def extract_adjective(sentences):
     adj_sentences = list()
@@ -18,22 +20,24 @@ def extract_adjective(sentences):
         words = nltk.word_tokenize(sentence)
         adj_tags = nltk.pos_tag(words)
         one_adj_sentence = ""
-        for index, tag in enumerate(adj_tags, start = 0):
+        for index, tag in enumerate(adj_tags, start=0):
             one_tag = tag[1]
             if one_tag in ['JJ', 'JJR', 'JJS']:
                 one_adj_sentence += words[index]
                 one_adj_sentence += " "
         adj_sentences.append(one_adj_sentence)
-        #print(one_adj_sentence)
+        # print(one_adj_sentence)
     return adj_sentences
+
 
 def removePunc(input):
     '''
     :param input: string
     :return: string, without the punctuations
     '''
-    #return input.translate(string.maketrans("",""), string.punctuation)
+    # return input.translate(string.maketrans("",""), string.punctuation)
     return re.sub("[\.\t\,\:;\(\)\.]", "", input, 0, 0)
+
 
 def numOfWords(input):
     '''
@@ -41,11 +45,12 @@ def numOfWords(input):
     :return: number of words, number of continuous space
     '''
     splitted = input.split(" ")
-    res=0
+    res = 0
     for i in splitted:
-        if len(i)>0:
-            res+=1
+        if len(i) > 0:
+            res += 1
     return res
+
 
 def numOfChar(input):
     '''
@@ -54,30 +59,33 @@ def numOfChar(input):
     '''
     return len(input)
 
+
 def numOfPunc(input):
     '''
     :param input: string
     :return: number of punctuations
     '''
-    return len(input)-len(removePunc(input))
+    return len(input) - len(removePunc(input))
+
 
 def numOfContPunc(input):
-    res=0;
-    state=False
-    for i in range(1,len(input)):
+    res = 0;
+    state = False
+    for i in range(1, len(input)):
         if input[i] in string.punctuation:
-            if input[i-1] in string.punctuation:
+            if input[i - 1] in string.punctuation:
                 if state:
                     pass
                 else:
-                    state=True
-                    res+=1
+                    state = True
+                    res += 1
             else:
-                state=False
+                state = False
                 pass
         else:
-            state=False
+            state = False
     return res
+
 
 def numOfContUpperCase(input):
     res = 0;
@@ -98,18 +106,19 @@ def numOfContUpperCase(input):
     return res
     pass
 
-def constructMat(file,label):
+
+def constructMat(file, label):
     '''
     :param file: input file
     :param label: the label of the data in the file
     :return: ndarray
     '''
-    res=np.array([])
-    line1=True
+    res = np.array([])
+    line1 = True
     with open(file) as data:
         for line in data:
             if line1:
-                line1=False
+                line1 = False
                 cleaned = line.lower().strip()
                 original = line.strip()
                 fea1 = numOfWords(cleaned)
@@ -130,6 +139,7 @@ def constructMat(file,label):
                 res = np.append(res, newrow, axis=0)
     return res
 
+
 def constructRealFea(headline):
     cleaned = headline.lower().strip()
     original = headline.strip()
@@ -143,5 +153,5 @@ def constructRealFea(headline):
 
 
 if __name__ == '__main__':
-    #print numOfContUpperCase("huhAAiAihiuhAAAAuhuhAAAAA")
-    print(constructMat('./fake.txt',1))
+    # print numOfContUpperCase("huhAAiAihiuhAAAAuhuhAAAAA")
+    print(constructMat('./fake.txt', 1))
