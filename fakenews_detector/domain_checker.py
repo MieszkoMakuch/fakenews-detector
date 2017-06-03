@@ -2,7 +2,7 @@ import json
 
 import requests
 
-from fakenews_detector.url_utils import get_data
+from fakenews_detector.url_utils import get_data_path
 
 
 class OpenSourcesInfo:
@@ -18,7 +18,7 @@ class OpenSourcesInfo:
 
     @staticmethod
     def init_tags_descriptions():
-        with open(get_data('opensources/tags.json')) as data_file:
+        with open(get_data_path('opensources/tags.json')) as data_file:
             return json.load(data_file)
 
     tags_descriptions = init_tags_descriptions.__func__()
@@ -82,7 +82,7 @@ class FakeNewsDBInfo:
 
     @staticmethod
     def init_categories_descriptions():
-        with open(get_data('categories.json')) as data_file:
+        with open(get_data_path('categories.json')) as data_file:
             return json.load(data_file)
 
     tags_descriptions = init_categories_descriptions.__func__()

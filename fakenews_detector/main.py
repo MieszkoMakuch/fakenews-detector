@@ -5,7 +5,7 @@ from newspaper import Article
 
 from fakenews_detector.domain_checker import check_domain
 from fakenews_detector.fake_fact_ai.application import mod
-from fakenews_detector.url_utils import get_domain, get_data
+from fakenews_detector.url_utils import get_domain, get_data_path
 
 
 def ai_check(article):
@@ -52,7 +52,7 @@ def check_if_all_categories_are_described():
     json_data = requests.get(
         'https://raw.githubusercontent.com/aligajani/fake-news-detector/master/output/fake-news-source.json').json()
 
-    with open(get_data('categories.json')) as data_file:
+    with open(get_data_path('categories.json')) as data_file:
         json_tags = json.load(data_file)
 
     not_listed = []

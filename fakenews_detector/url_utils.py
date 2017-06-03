@@ -7,7 +7,7 @@ import validators
 _ROOT = os.path.abspath(os.path.dirname(__file__))
 
 
-def get_data(path):
+def get_data_path(path):
     return os.path.join(_ROOT, 'json_local', path)
 
 
