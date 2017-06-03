@@ -46,9 +46,7 @@ def append_if_exists(_json, _list, key):
         _list.append(str_info)
 
 
-def opensource_check(domain):
-    json_data = requests.get(
-        'https://raw.githubusercontent.com/BigMcLargeHuge/opensources/master/sources/sources.json').json()
+def opensource_check(domain, json_data):
     if domain.lower() in json_data.keys():
         json_domain_info = json_data[domain]
 
@@ -136,14 +134,26 @@ def check_domain(domain, result):
     # Opensource
     result += 'Opensource check:' + '\n'
 
-    open_source_result = opensource_check(domain)
+    json_opensource_data = requests.get('https://raw.githubusercontent.com/BigMcLargeHuge/opensources/master/sources/sources.json').json()
+    open_source_result = opensource_check(domain=domain, json_data=json_opensource_data)
     if open_source_result is not None:
         result += open_source_result
     else:
         result += 'opensource_check: no information' + '\n'
-    result += '\nFake news check:' + '\n'
+
+    # Manualy added
+    result += '\nManualy added check:' + '\n'
+
+    with open(get_data_path('manualy_added_sites.json')) as data_file:
+        json_manual_data = json.load(data_file)
+    open_source_result = opensource_check(domain=domain, json_data=json_manual_data)
+    if open_source_result is not None:
+        result += open_source_result
+    else:
+        result += 'Manualy added: no information' + '\n'
 
     # Fakenews
+    result += '\nFake news check:' + '\n'
     fakenews_result = fakenews_check(domain)
     if fakenews_result is not None:
         result += fakenews_result
