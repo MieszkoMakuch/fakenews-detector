@@ -1,11 +1,49 @@
 import json
+from enum import Enum
 
 import requests
 
 from fakenews_detector.url_utils import get_data_path
 
 
-class OpenSourcesInfo:
+def append_if_exists(_json, _list, key):
+    str_info = _json[key]
+    if str_info is not '':
+        _list.append(str_info)
+
+
+class NewsVerdict(Enum):
+    FAKE = 'Fake'
+    REAL = 'Real'
+    WARNING = 'Warning'
+    UNKNOWN = 'Unknown'
+
+
+class AbstractInfo:
+    # TODO - add description
+    def get_info(self):
+        raise NotImplementedError
+
+    def get_verdict(self, category):
+        raise NotImplementedError
+
+    @staticmethod
+    def check(domain, sources):
+        raise NotImplementedError
+
+    @staticmethod
+    def print_info(verdicts, categories, descriptions, source_notes):
+        str_result = ''
+        for i, verdict in enumerate(verdicts):
+            str_result += 'Verdict' + str(i + 1) + ': ' + verdict.value + '\n'
+            str_result += '\tCategory: ' + categories[i] + '\n'
+            str_result += '\tDescription: ' + descriptions[i] + '\n'
+        for i, note in enumerate(source_notes):
+            str_result += 'Source note' + str(i + 1) + ': ' + note + '\n'
+        return str_result
+
+
+class OpenSourcesInfo(AbstractInfo):
     """
     Class containing tags and information about specific domain with fake news based on 
     http://www.opensources.co/ database
@@ -17,38 +55,38 @@ class OpenSourcesInfo:
         self.source_notes = source_notes
 
     @staticmethod
-    def init_tags_descriptions():
+    def init_categories_descriptions():
         with open(get_data_path('opensources/tags.json')) as data_file:
             return json.load(data_file)
 
-    tags_descriptions = init_tags_descriptions.__func__()
+    categories_descriptions = init_categories_descriptions.__func__()
 
-    def print_info(self):
-        print('Domain: ' + self.domain)
-        for i, category in enumerate(self.categories):
-            print("Category" + str(i + 1) + ": " + self.tags_descriptions[category])
-        for i, note in enumerate(self.source_notes):
-            print("Source note " + str(i + 1) + ": " + note)
+    def get_verdict(self, category):
+        return {
+            'fake': NewsVerdict.FAKE,
+            'satire': NewsVerdict.WARNING,
+            'bias': NewsVerdict.FAKE,
+            'conspiracy': NewsVerdict.FAKE,
+            'rumor': NewsVerdict.FAKE,
+            'state': NewsVerdict.WARNING,
+            'junksci': NewsVerdict.FAKE,
+            'hate': NewsVerdict.WARNING,
+            'clickbait': NewsVerdict.WARNING,
+            'unreliable': NewsVerdict.WARNING,
+            'political': NewsVerdict.WARNING,
+            'reliable': NewsVerdict.REAL
+        }[category]
 
-    def string_info(self):
-        result = ''
-        result += 'Domain: ' + self.domain + '\n'
-        for i, category in enumerate(self.categories):
-            result += "Category" + str(i + 1) + ": " + self.tags_descriptions[category] + '\n'
-        for i, note in enumerate(self.source_notes):
-            result += "Source note " + str(i + 1) + ": " + note + '\n'
-        return result
+    def get_info(self):
+        verdicts = [self.get_verdict(x) for x in self.categories]
+        categories = self.categories
+        descriptions = [self.categories_descriptions[x] for x in self.categories]
+        source_notes = self.source_notes
+        return verdicts, categories, descriptions, source_notes
 
-
-def append_if_exists(_json, _list, key):
-    str_info = _json[key]
-    if str_info is not '':
-        _list.append(str_info)
-
-
-def opensource_check(domain, json_data):
-    if domain.lower() in json_data.keys():
-        json_domain_info = json_data[domain]
+    @staticmethod
+    def check(domain, json_sources):
+        json_domain_info = json_sources[domain]
 
         types_list = []
         append_if_exists(json_domain_info, types_list, 'type')
@@ -61,8 +99,7 @@ def opensource_check(domain, json_data):
         open_source_info = OpenSourcesInfo(domain=domain,
                                            categories=types_list,
                                            source_notes=notes_list)
-        return open_source_info.string_info()
-    return None
+        return open_source_info.get_info()
 
 
 class FakeNewsDBInfo:
@@ -133,22 +170,21 @@ def check_domain(domain, result):
 
     # Opensource
     result += 'Opensource check:' + '\n'
-
-    json_opensource_data = requests.get('https://raw.githubusercontent.com/BigMcLargeHuge/opensources/master/sources/sources.json').json()
-    open_source_result = opensource_check(domain=domain, json_data=json_opensource_data)
-    if open_source_result is not None:
-        result += open_source_result
+    json_opensource_data = requests.get(
+        'https://raw.githubusercontent.com/BigMcLargeHuge/opensources/master/sources/sources.json').json()
+    if domain.lower() in json_opensource_data.keys():
+        result += AbstractInfo.print_info(*OpenSourcesInfo.check(domain=domain,
+                                                                 json_sources=json_opensource_data))
     else:
         result += 'opensource_check: no information' + '\n'
 
     # Manualy added
     result += '\nManualy added check:' + '\n'
-
     with open(get_data_path('manualy_added_sites.json')) as data_file:
         json_manual_data = json.load(data_file)
-    open_source_result = opensource_check(domain=domain, json_data=json_manual_data)
-    if open_source_result is not None:
-        result += open_source_result
+    if domain.lower() in json_manual_data.keys():
+        result += AbstractInfo.print_info(*OpenSourcesInfo.check(domain=domain,
+                                                                 json_sources=json_manual_data))
     else:
         result += 'Manualy added: no information' + '\n'
 
