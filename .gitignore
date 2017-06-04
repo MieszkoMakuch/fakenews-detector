@@ -47,3 +47,10 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+MANIFEST
+dist/
+fakenews_detector.egg-info/
+fakenews_detector/__pycache__/domain_checker.cpython-36.pyc
+fakenews_detector/__pycache__/main.cpython-36.pyc
+fakenews_detector/__pycache__/url_utils.cpython-36.pyc
+fakenews_detector/fake_fact_ai/__pycache__/
