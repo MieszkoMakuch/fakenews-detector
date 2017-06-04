@@ -1,61 +1,66 @@
-from newspaper import Article
+import json
 
-from fakenews_detector.domain_checker import check_domain
-from fakenews_detector.fake_fact_ai.application import mod
-from fakenews_detector.url_utils import get_domain
+import requests
 
-
-def ai_check(article):
-    predict_result = ''
-    if article.title is not None:
-        if mod.query(article.title) == 1:
-            predict_result = "Real News"
-        else:
-            predict_result = "Fake News"
-    return predict_result
-
-
-def analyze_article(article, result):
-    article.download()
-    if not article.is_downloaded:
-        raise ConnectionError('Cannot download the article')
-    article.parse()
-    result += 'AI check:' + '\n'
-    result += ai_check(article) + '\n'
-    return result
+from fakenews_detector.domain_checker import OpenSourcesInfo, FakeNewsDBInfo
+from fakenews_detector.news_info import AIInfo, AbstractInfo
+from fakenews_detector.url_utils import get_domain, get_data_path
 
 
 def check_news(url):
-    # Get newspaper article
-    article = Article(url)
+    info_list = []
 
-    # Check domain
     domain = get_domain(url)
-    result = ''
-    result = check_domain(domain, result)
 
-    # Analyze article
+    # Check OpenSource
+    json_opensource_data = requests.get(
+        'https://raw.githubusercontent.com/BigMcLargeHuge/opensources/master/sources/sources.json').json()
+    if OpenSourcesInfo.can_check_url(domain, json_opensource_data):
+        (op_info) = OpenSourcesInfo.check(domain=domain, json_sources=json_opensource_data)
+        info_list.append(op_info)
 
-    # AI
-    result += 'Analyzing article with ai:' + '\n'
-    try:
-        result = analyze_article(article, result)
-    except ConnectionError as error:
-        result += str(error)
-    return result
+    # Check Manually added
+    with open(get_data_path('manualy_added_sites.json')) as data_file:
+        json_manual_data = json.load(data_file)
+    if OpenSourcesInfo.can_check_url(domain, json_manual_data):
+        (ma_info) = OpenSourcesInfo.check(domain=domain, json_sources=json_manual_data)
+        info_list.append(ma_info)
 
+    # Check Fakenews
+    fakenews_json = requests.get(
+        'https://raw.githubusercontent.com/aligajani/fake-news-detector/master/output/fake-news-source.json').json()
+    in_fakenews_sources, json_site = FakeNewsDBInfo.can_check_url(domain, fakenews_json)
+    if in_fakenews_sources:
+        (fn_info) = FakeNewsDBInfo.check(domain=domain, json_site=json_site)
+        info_list.append(fn_info)
+
+    # Check AI
+    can_download_article, article = AIInfo.can_check_url(url, None)
+    if can_download_article:
+        (ai_info) = AIInfo.check(domain=domain, article=article)
+        info_list.append(ai_info)
+
+    return info_list
+
+
+def info_to_str(info_list):
+    info_str = ''
+    for info in info_list:
+        info_str += AbstractInfo.info_to_str(info[0], info[1], info[2], info[3])
+    return info_str
+
+
+# url_100PercentFedUp = 'http://100percentfedup.com/comedian-kathy-griffins-7th-final-venue-cancelswhos-laughing-now/'
+# print(info_to_str(check_news(url_100PercentFedUp)))
 
 url_ancientcode = 'http://www.ancient-code.com/does-this-top-secret-memo-finally-prove-ufo-crash-roswell/'
-print(check_news(url_ancientcode))
+print(info_to_str(check_news(url_ancientcode)))
 
-url_100PercentFedUp = 'http://100percentfedup.com/comedian-kathy-griffins-7th-final-venue-cancelswhos-laughing-now/'
-print(check_news(url_100PercentFedUp))
-
-url_szdziennik = 'http://aszdziennik.pl/120211,akcja-fanow-na-koncercie-kings-of-leon-w-czasie-use-somebody-odloza-smartfony-i-popatrza-na-scene'
-print(check_news(url_szdziennik))
-
-url_onet = 'http://muzyka.onet.pl/wywiady/margaret-dzis-popelniam-bledy-z-podniesiona-glowa-wywiad/s7c0bq'
-print(check_news(url_onet))
-
-url_test = 'http://www.chicagotribune.com/news/nationworld/ct-london-bridge-incident-20170603-story.html'
-print(check_news(url_test))
+# url_szdziennik = 'http://aszdziennik.pl/120211,akcja-fanow-na-koncercie-kings-of-leon-w-czasie-use-somebody-odloza-smartfony-i-popatrza-na-scene'
+# print(info_to_str(check_news(url_szdziennik)))
+#
+# url_onet = 'http://muzyka.onet.pl/wywiady/margaret-dzis-popelniam-bledy-z-podniesiona-glowa-wywiad/s7c0bq'
+# print(info_to_str(check_news(url_onet)))
+#
+# url_test = 'sfgate.com'
+# print(info_to_str(check_news(url_test)))

@@ -3,7 +3,6 @@ from urllib.parse import urlparse, ParseResult
 
 import validators
 
-
 _ROOT = os.path.abspath(os.path.dirname(__file__))
 
 
