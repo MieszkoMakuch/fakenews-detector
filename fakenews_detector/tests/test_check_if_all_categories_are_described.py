@@ -1,11 +1,12 @@
-from unittest import TestCase
-import requests
-from fakenews_detector.url_utils import get_data_path
 import json
+from unittest import TestCase
+
+import requests
+
+from fakenews_detector.url_utils import get_data_path
 
 
 class TestDomainChecker(TestCase):
-
     @staticmethod
     def check_if_all_categories_are_described(json_data, json_categories):
         not_listed = []
@@ -27,5 +28,4 @@ class TestDomainChecker(TestCase):
         with open(get_data_path('categories.json')) as data_file:
             json_categories = json.load(data_file)
         self.assertTrue(self.check_if_all_categories_are_described(json_data=json_data,
-                                                                json_categories=json_categories))
-
+                                                                   json_categories=json_categories))
