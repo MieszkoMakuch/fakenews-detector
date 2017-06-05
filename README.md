@@ -4,9 +4,9 @@ Article and domain analyzer written in python 3 to help user detect fake news co
 ## Online demo
 View a working online demo here (it may take a few seconds to deploy):
 
-####[Demo](https://protected-inlet-79294.herokuapp.com/)
+#### [Demo](https://protected-inlet-79294.herokuapp.com/)
 
-####[Github repository](https://github.com/MieszkoMakuch/fakenews-detector-demo)
+#### [Github repository](https://github.com/MieszkoMakuch/fakenews-detector-demo)
 
 ## Motivation
 The Oxford Dictionaries Word of the Year 2016 was post-truth – an adjective defined as ‘relating to or denoting circumstances in which objective facts are less influential in shaping public opinion than appeals to emotion and personal belief’.
