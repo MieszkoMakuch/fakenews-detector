@@ -4,9 +4,34 @@ Article and domain analyzer written in python 3 to help user detect fake news co
 ## Online demo
 View a working online demo here (it may take a few seconds to deploy):
 
-#### [Demo](https://protected-inlet-79294.herokuapp.com/)
+#### [Online demo](https://protected-inlet-79294.herokuapp.com/)
 
-#### [Github repository](https://github.com/MieszkoMakuch/fakenews-detector-demo)
+#### [Demo - Github repository](https://github.com/MieszkoMakuch/fakenews-detector-demo)
+
+### Try to paste this examples and see the results.
+#### Analysis based on human maintained lists:
+Fake, junk science:
+
+`http://www.ancient-code.com/did-ancient-mankind-know-the-secrets-of-levitation/`
+
+Warning, gossip:
+
+`http://en.mediamass.net/people/colin-hanks/married.html`
+
+Real, Credible:
+
+`http://www.bbc.com/news/uk-40148737`
+
+#### Analysis based on AI:
+Fake:
+
+`http://aszdziennik.pl/120211,akcja-fanow-na-koncercie-kings-of-leon-w-czasie-use-somebody-odloza-smartfony-i-popatrza-na-scene`
+
+`http://dziennikbulwarowy.pl/146/straszyl-wiernych-przez-megafon.html#edytuj`
+
+Real:
+
+`http://wyborcza.pl/7,154903,21913047,liga-legii-mistrzostwo-zostaje-w-warszawie.html`
 
 ## Motivation
 The Oxford Dictionaries Word of the Year 2016 was post-truth – an adjective defined as ‘relating to or denoting circumstances in which objective facts are less influential in shaping public opinion than appeals to emotion and personal belief’.
