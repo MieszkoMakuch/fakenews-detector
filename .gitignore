@@ -54,3 +54,6 @@ fakenews_detector/__pycache__/domain_checker.cpython-36.pyc
 fakenews_detector/__pycache__/main.cpython-36.pyc
 fakenews_detector/__pycache__/url_utils.cpython-36.pyc
 fakenews_detector/fake_fact_ai/__pycache__/
+/.cache/
+.cache/
+fakenews_detector/__pycache__/news_info.cpython-36.pyc
