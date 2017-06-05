@@ -1,0 +1,6 @@
+1. 	moskalap:
+    https://github.com/AGHPythonCourse2017/zad2-moskalap/pull/1
+2.  luknw:
+    https://github.com/AGHPythonCourse2017/zad2-luknw/pull/1
+3.  Chimstaz
+    https://github.com/AGHPythonCourse2017/zad2-Chimstaz/pull/1
