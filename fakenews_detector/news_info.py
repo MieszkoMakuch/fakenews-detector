@@ -78,13 +78,14 @@ class AIInfo(AbstractInfo):
         if AIInfo.get_verdict(article) == NewsVerdict.REAL:
             verdicts = [AIInfo.get_verdict(article)]
             categories = ['Real News']
-            descriptions = ['Real News']
+            descriptions = ['Analysis performed by artificial intelligence indicate that this article is credible']
         else:
             verdicts = [AIInfo.get_verdict(article)]
             categories = ['Fake News']
-            descriptions = ['Fake News']
+            descriptions = ['Analysis performed by artificial intelligence indicate that this article is not credible']
         source_notes = [domain] + ['Artificial intelligence'] + \
-                       ['WARNING: analysis performed by artificial intelligence. Result may be inaccurate.']
+                       ['WARNING: This result may be inaccurate! This domain wasn\'t categorised on any '
+                        'human maintained list thus analysis was performed by machine learning module.']
         return verdicts, categories, descriptions, source_notes
 
 
