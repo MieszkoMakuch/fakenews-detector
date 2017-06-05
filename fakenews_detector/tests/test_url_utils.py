@@ -17,7 +17,7 @@ class TestUrlUtils(TestCase):
         # Test valid urls
         expected_url = 'http://google.pl/'
         for url in self.valid_urls_google_pl:
-            self.assertEqual(expected_url, format_url(url))
+            assert expected_url == format_url(url)
 
         # Test not valid urls
         for url in self.not_valid_urls:
@@ -27,4 +27,4 @@ class TestUrlUtils(TestCase):
     def test_get_domain(self):
         expected_domain = 'google.pl'
         for url in self.valid_urls_google_pl:
-            self.assertEqual(expected_domain, get_domain(url))
+            assert expected_domain == get_domain(url)
