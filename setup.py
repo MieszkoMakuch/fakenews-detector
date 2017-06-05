@@ -5,7 +5,7 @@ from setuptools import setup
 setup(
     name='fakenews_detector',
     packages=['fakenews_detector', 'fakenews_detector.fake_fact_ai'],
-    version='0.1.18',
+    version='0.1.24',
     description='Detect fake and get information about the source.',
     author='Mieszko Makuch',
     author_email='mmakuch@googlemail.com',
