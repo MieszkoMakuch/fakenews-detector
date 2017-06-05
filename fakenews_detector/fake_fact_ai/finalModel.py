@@ -3,14 +3,15 @@
     final model
     """
 
-import fakenews_detector.fake_fact_ai.RandomForest as rf  # bag learner
-import fakenews_detector.fake_fact_ai.RandomTree as rt
-import fakenews_detector.fake_fact_ai.feature as feature
 import numpy as np
 from sklearn import tree
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.svm import SVC
+
+import fakenews_detector.fake_fact_ai.RandomForest as rf  # bag learner
+import fakenews_detector.fake_fact_ai.RandomTree as rt
+import fakenews_detector.fake_fact_ai.feature as feature
 
 
 class model(object):

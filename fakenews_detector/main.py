@@ -48,4 +48,3 @@ def info_to_str(info_list):
     for info in info_list:
         info_str += AbstractInfo.info_to_str(info[0], info[1], info[2], info[3])
     return info_str
-

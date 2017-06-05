@@ -1,5 +1,6 @@
 # all the imports
 import os
+
 from fakenews_detector.fake_fact_ai.finalModel import model
 from fakenews_detector.fake_fact_ai.settings import APP_STATIC
 
