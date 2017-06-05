@@ -2,7 +2,8 @@
 Article and domain analyzer written in python 3 to help user detect fake news content.
 
 ## Online demo
-View a working online demo here (it may take a few seconds to deploy): 
+View a working online demo here (it may take a few seconds to deploy):
+
 https://protected-inlet-79294.herokuapp.com/
 
 ## Motivation
